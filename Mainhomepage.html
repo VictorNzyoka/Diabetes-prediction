@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+    <style>
+        body{
+            background-color: rgb(192, 214, 233);
+          
+        }
+        form{
+            max-width: fit-content;
+            margin: 0 auto;
+            background-color: aliceblue;
+            border-radius: 5px;
+            padding: 2px;
+            
+        }
+        h1{
+            text-align: center;
+            color: brown;
+           
+        }
+        label{
+            display:block;
+            margin-bottom: 10px;
+            margin-top: 6px;
+            
+        }
+        input[type="number"] {
+        width: 95%;
+        padding: 4px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 16px;
+        margin-bottom: 12px;
+        margin: auto;
+    }
+        
+    button[type="button"] {
+        background-color:blue;
+        color: whitesmoke;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    button[type="button"]:hover {
+        background-color: seagreen;
+        color: black;
+    }
+        
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <h3><b>Log out</b></h3>
+        <h3><b>About</b></h3>
+        <h3><b>FOQ</b></h3>
+        <h3><b>Learn more</b></h3>
+    </div>
+
+    <div >
+    <h1>Diabetes Prediction</h1>
+</div>
+
+    <form id="predictionForm">
+        <label for="pregnancies">Pregnancies:</label>
+        <input type="number" id="pregnancies" name="pregnancies" required><br>
+  
+        <label for="glucose">Glucose:</label>
+        <input type="number" id="glucose" name="glucose" required><br>
+
+        <label for="bloodPressure">Blood Pressure:</label>
+        <input type="number" id="bloodPressure" name="bloodPressure" required><br>
+
+        <label for="skinThickness">Skin Thickness:</label>
+        <input type="number" id="skinThickness" name="skinThickness" required><br>
+
+        <label for="insulin">Insulin:</label>
+        <input type="number" id="insulin" name="insulin" required><br>
+        <label for="bmi">BMI:</label>
+        <input type="number" id="bmi" name="bmi" required><br>
+    
+        <label for="diabetesPedigree">Diabetes Pedigree Function:</label>
+        <input type="number" id="diabetesPedigree" name="diabetesPedigree" required><br>
+   
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br>
+   
+        <button type="button" onclick="predict()">Predict</button>
+
+    </form>
+    <script>
+
+            // Send the data to the Flask server
+            function predict() {
+    const data = {
+        pregnancies: parseFloat(document.getElementById("pregnancies").value),
+        glucose: parseFloat(document.getElementById("glucose").value),
+        bloodPressure: parseFloat(document.getElementById("bloodPressure").value),
+        skinThickness: parseFloat(document.getElementById("skinThickness").value),
+        insulin: parseFloat(document.getElementById("insulin").value),
+        bmi: parseFloat(document.getElementById("bmi").value),
+        diabetesPedigree: parseFloat(document.getElementById("diabetesPedigree").value),
+        age: parseFloat(document.getElementById("age").value),
+    };
+
+    fetch("/predict", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+})
+
+    .then(response => response.json())
+    .then(result => {
+        console.log(result.prediction);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+    </script>
+</body>
+</html>
